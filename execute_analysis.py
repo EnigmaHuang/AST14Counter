@@ -3,15 +3,15 @@
 __author__ = 'Enigma'
 
 from AST14PyHeader import *
-from AnalyseData import *
 from FetchFile import *
-from datetime import *
+import AnalyseData as AD
+import datetime as DT
 import os
 
 mode = server_mode
 
 #确定当前日期
-cur_date = datetime.now()
+cur_date = DT.datetime.now()
 #cur_date += timedelta(hours=-4) #for debug use only
 date_str = str(cur_date.month).zfill(2) + str(cur_date.day).zfill(2)
 
@@ -26,7 +26,7 @@ if os.path.isfile(check_file_name):
 download_url_to_file(config_file_url, config_file_name)
 #检测配置文件是否正确，如果不正确=没有比赛，直接退出
 #如果是非法的配置文件，不需要转码，本身就是utf-8
-if legal_config_file(config_file_name) == no_contest:
+if AD.legal_config_file(config_file_name) == no_contest:
     debug_info_file = open(debug_file_name[mode], 'w')
     debug_info_file.writelines('No contest')
     debug_info_file.close()
@@ -37,7 +37,7 @@ if legal_config_file(config_file_name) == no_contest:
     exit()
 file_convert_pagecode(config_file_name, source_pagecode, config_file_name, dest_pagecode)
 
-load_config_file(config_file_name)
+AD.load_config_file(config_file_name)
 
 #下载主投票所的首页文件
 download_url_to_file(home_page_url, home_page_file_name[mode])
@@ -84,21 +84,18 @@ data_url_3 = fixed_data_url_2 + data_url_id_3 + '/'
 download_url_to_file(data_url_3, data_file_3_name)
 file_convert_pagecode(data_file_3_name, source_pagecode_2, data_file_3_name, dest_pagecode)
 
-for name in player_name:
-    debug_info.append(name+'\n')
+for name in AD.player_name:
+    AD.debug_info.append(name+'\n')
 
 #解析下载的页面
 print 'Download data over. Now start to analyse...'
-debug_info.append('\nData from :' + data_url_1 + '\n')
-analyse_file(data_file_name)
-debug_info.append('\nData from :' + data_url_2 + '\n')
-analyse_file(data_file_2_name)
-debug_info.append('\nData from :' + data_url_3 + '\n')
-analyse_file_b(data_file_3_name)
-
-#不知为何不能直接调用group_num和group_size，只能写返回...
-#但下面的rank可以直接引用......
-[gn, gs] = get_final_rank()
+AD.debug_info.append('\nData from :' + data_url_1 + '\n')
+AD.analyse_file(data_file_name)
+AD.debug_info.append('\nData from :' + data_url_2 + '\n')
+AD.analyse_file(data_file_2_name)
+AD.debug_info.append('\nData from :' + data_url_3 + '\n')
+AD.analyse_file_b(data_file_3_name)
+AD.get_final_rank()
 
 print 'Analysis over. Now start to output result...'
 
@@ -109,12 +106,12 @@ sres += '</head><body align=center>'
 
 sres += 'AST 14 Web Data Scanner Ultra Lite, TestType, Enigma.H <br>'
 sres += 'Report time : CST '+str(cur_date).split('.')[0]+'<br>'
-sres += 'Counted token number = {0:d} <br>'.format(used_token.__len__())
+sres += 'Counted token number = {0:d} <br>'.format(AD.used_token.__len__())
 
-for i in xrange(gn):
+for i in xrange(AD.group_num):
     sres += 'Group {0:d} <br>'.format(i+1)
-    for j in xrange(gs):
-        sres += 'Rank {0:d} : {1:3d} votes : {2:s} <br>'.format(j+1, rank[i][j][0], rank[i][j][1])
+    for j in xrange(AD.group_size):
+        sres += 'Rank {0:d} : {1:3d} votes : {2:s} <br>'.format(j+1, AD.rank[i][j][0], AD.rank[i][j][1])
 
 sres += '</body></html>'
 
@@ -122,7 +119,7 @@ res_html = open(result_file_name[mode], 'w')
 res_html.write(sres)
 res_html.close()
 debug_info_file = open(debug_file_name[mode], 'w')
-for info_str in debug_info:
+for info_str in AD.debug_info:
     debug_info_file.writelines(info_str)
 debug_info_file.close()
 

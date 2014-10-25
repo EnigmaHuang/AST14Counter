@@ -3,6 +3,7 @@ __author__ = 'Enigma'
 
 import urllib2
 
+
 def download_url_to_file(url, file_name):
     print 'Connecting to url ' + url
     req = urllib2.urlopen(url)

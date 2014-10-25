@@ -5,6 +5,21 @@ from AST14PyHeader import *
 
 __author__ = 'Enigma'
 
+#解析数据使用的变量
+group_num = int()
+group_size = int()
+start_time_abs_min = 0
+max_vote_per_group = 0
+player_name  = []
+used_token   = []
+vote_time    = [[] for i in xrange(max_player_size)]
+vote_floor   = [[] for i in xrange(max_player_size)]
+player_group = [[] for i in xrange(max_player_size)]
+rank         = [[] for i in xrange(max_player_size)]
+
+debug_info   = []
+
+
 #返回值的list顺序是[楼层，Token，投票绝对分钟，[投票列]]
 def analyse_floor(floor_str):
     if floor_str.find('</dl>') > 0:
@@ -178,15 +193,12 @@ def get_final_rank():
     return [group_num, group_size]
 
 
-def analyse_file(dfname):
-    data_file = open(dfname, 'r')
-    data_text = data_file.read()
-    floors = data_text.split('</dd>')
-    floor_num = data_text.count('</dd>')
-    data_file.close()
-
+def analyse_floors(floors, floor_num, opt):
     for j in xrange(0, floor_num, 1):
-        floor_res = analyse_floor(floors[j])
+        if opt == 1:
+            floor_res = analyse_floor(floors[j])
+        if opt == 2:
+            floor_res = analyse_floor_b(floors[j])
         add_vote(floor_res)
         if (floor_res[0] > -1) and (floor_res[2] != contest_not_start) and (floor_res[2] != contest_ended):
             if (floor_res[1] == 'N/A'):
@@ -194,6 +206,16 @@ def analyse_file(dfname):
             else:
                 tmp_s = str(floor_res[0]).zfill(3) + ':' + str(floor_res[1]) + '\n'
             debug_info.append(tmp_s)
+
+
+def analyse_file(dfname):
+    data_file = open(dfname, 'r')
+    data_text = data_file.read()
+    floors = data_text.split('</dd>')
+    floor_num = data_text.count('</dd>')
+    data_file.close()
+    analyse_floors(floors, floor_num, 1)
+
 
 
 def analyse_file_b(dfname):
@@ -202,16 +224,6 @@ def analyse_file_b(dfname):
     floors = data_text.split('<dt>')
     floor_num = data_text.count('<dt>')
     data_file.close()
-
     #把分割出来的第一块扔掉
     floors.remove(floors[0])
-
-    for j in xrange(797, floor_num, 1):
-        floor_res = analyse_floor_b(floors[j])
-        add_vote(floor_res)
-        if (floor_res[0] > -1) and (floor_res[2] != contest_not_start) and (floor_res[2] != contest_ended):
-            if (floor_res[1] == 'N/A'):
-                tmp_s = str(floor_res[0]).zfill(3) + ': Token not found \n'
-            else:
-                tmp_s = str(floor_res[0]).zfill(3) + ':' + str(floor_res[1]) + '\n'
-            debug_info.append(tmp_s)
+    analyse_floors(floors, floor_num, 2)

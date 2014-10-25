@@ -2,15 +2,16 @@
 __author__ = 'Enigma'
 
 #信号与范围定义
-max_player_size   = 100
+local_mode        = 0x0000
+server_mode       = 0x0001
+max_player_size   = 0x0064
 token_used        = 0x1401
 no_token          = 0x1402
 player_too_much   = 0x1403
 no_contest        = 0x1404
 contest_not_start = 0x1405
 contest_ended     = 0x1407
-server_mode       = 1
-local_mode        = 0
+
 
 #页面转码用到的编码
 source_pagecode   = 'shift_jisx0213'
@@ -55,17 +56,3 @@ date_pref2     = '：'
 date_suff      = '('
 vote_time_pref = ') '
 vote_time_suff = ' ID:'
-
-#解析数据使用的变量
-group_num = int()
-group_size = int()
-start_time_abs_min = 0
-max_vote_per_group = 0
-player_name  = []
-used_token   = []
-vote_time    = [[] for i in xrange(max_player_size)]
-vote_floor   = [[] for i in xrange(max_player_size)]
-player_group = [[] for i in xrange(max_player_size)]
-rank         = [[] for i in xrange(max_player_size)]
-
-debug_info   = []
