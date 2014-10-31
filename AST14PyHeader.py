@@ -22,6 +22,7 @@ dest_pagecode     = 'utf-8'
 fixed_data_url    = 'http://saimoe.thread.jp/test/read.cgi/ast/'
 fixed_data_url_2  = 'http://jbbs.shitaraba.net/bbs/read.cgi/anime/10101/'
 data_url_2_filter = '投票補助'
+data_url_2_filter_2 = '/anime/10101/'
 data_url_2_offset = '1411915367/l50">2</a> : <a href="#2">アニメ最萌トーナメント2014 '
 fixed_conf_url    = 'http://www2.saimoe2014.info/2014/config/config'
 home_page_url     = 'http://saimoe.thread.jp/ast/'
@@ -34,7 +35,7 @@ home_page_file_name   = ['E://Playground//AST14Py//data//homepage.html', '/AST14
 home_page_file_2_name = ['E://Playground//AST14Py//data//homepage2.html', '/AST14Py/data/homepage2.html']
 download_path         = ['E://Playground//AST14Py//data//', '/AST14Py/data/']
 result_file_name      = ['E://Playground//AST14Py//res.html', '/var/www/res.html']
-debug_file_name       = ['E://Playground//AST14Py//debuginfo.txt', '/var/www/debuginfo.txt']
+debug_file_name       = ['E://Playground//AST14Py//debuginfo.html', '/var/www/debuginfo.html']
 
 #文件名后缀
 data_file_suff  = '.html'

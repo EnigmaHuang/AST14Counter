@@ -76,7 +76,8 @@ hp_text = hp_file.read()
 hp_file.close()
 
 #根据备用投票所的首页文件确定最新的备用投票页面
-startpos = hp_text.find(data_url_2_filter) - len(data_url_2_offset)
+startpos = hp_text.find(data_url_2_filter) - len(data_url_2_offset) - 50
+startpos = hp_text.find(data_url_2_filter_2, startpos) + len(data_url_2_filter_2)
 data_url_id_3 = hp_text[startpos:startpos + 10]
 data_file_3_name = download_path[mode] + 'b' + data_url_id_3 + data_file_suff
 data_url_3 = fixed_data_url_2 + data_url_id_3 + '/'
@@ -84,16 +85,19 @@ data_url_3 = fixed_data_url_2 + data_url_id_3 + '/'
 download_url_to_file(data_url_3, data_file_3_name)
 file_convert_pagecode(data_file_3_name, source_pagecode_2, data_file_3_name, dest_pagecode)
 
+AD.debug_info.append('<html><head><meta http-equiv=Content-Type content="text/html;charset=utf-8">')
+AD.debug_info.append('<title>AST14 WDSUL Debug Info</title><body>\n')
+
 for name in AD.player_name:
-    AD.debug_info.append(name+'\n')
+    AD.debug_info.append('Player : '+name+'<br>')
 
 #解析下载的页面
 print 'Download data over. Now start to analyse...'
-AD.debug_info.append('\nData from :' + data_url_1 + '\n')
+AD.debug_info.append('<br>Data from :' + data_url_1 + '<br>')
 AD.analyse_file(data_file_name)
-AD.debug_info.append('\nData from :' + data_url_2 + '\n')
+AD.debug_info.append('<br>Data from :' + data_url_2 + '<br>')
 AD.analyse_file(data_file_2_name)
-AD.debug_info.append('\nData from :' + data_url_3 + '\n')
+AD.debug_info.append('<br>Data from :' + data_url_3 + '<br>')
 AD.analyse_file_b(data_file_3_name)
 AD.get_final_rank()
 
@@ -114,6 +118,7 @@ for i in xrange(AD.group_num):
         sres += 'Rank {0:d} : {1:3d} votes : {2:s} <br>'.format(j+1, AD.rank[i][j][0], AD.rank[i][j][1])
 
 sres += '</body></html>'
+AD.debug_info.append('\n</body></html>')
 
 res_html = open(result_file_name[mode], 'w')
 res_html.write(sres)

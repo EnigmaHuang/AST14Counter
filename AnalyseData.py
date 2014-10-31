@@ -202,9 +202,13 @@ def analyse_floors(floors, floor_num, opt):
         add_vote(floor_res)
         if (floor_res[0] > -1) and (floor_res[2] != contest_not_start) and (floor_res[2] != contest_ended):
             if (floor_res[1] == 'N/A'):
-                tmp_s = str(floor_res[0]).zfill(3) + ': Token not found \n'
+                tmp_s = str(floor_res[0]).zfill(3) + ': Token not found <br>'
             else:
-                tmp_s = str(floor_res[0]).zfill(3) + ':' + str(floor_res[1]) + '\n'
+                tmp_s = str(floor_res[0]).zfill(3) + ':' + str(floor_res[1]) + ' Vote to : '
+                vote_players = floor_res[3:]
+                for player in vote_players:
+                    tmp_s += player + ' '
+                tmp_s += ' <br>'
             debug_info.append(tmp_s)
 
 
