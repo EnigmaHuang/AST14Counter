@@ -39,7 +39,7 @@ def analyse_floor(floor_str):
     token = floor_str[token_start_pos:token_end_pos + len(token_suff) + 5]
     if not ((token_start_pos > 0) and (token_end_pos > token_start_pos)):
         token = 'N/A'
-    if len(token) != 29:
+    if not ((len(token) == 29) or (len(token) == 28)):
         token = 'N/A'
 
     vote_date_str = floor_str[floor_str.find(date_pref) + len(date_pref2):floor_str.find(date_suff)]
@@ -62,6 +62,8 @@ def analyse_floor(floor_str):
     votes = []
     for ov in ori_votes:
         pos = ov.find(vote_pref)
+        if pos == -1:
+            continue
         votes.append(ov[pos + len(vote_pref):])
     votes = [floor_num] + [token] + [vote_abs_min] + votes
 
@@ -83,7 +85,7 @@ def analyse_floor_b(floor_str):
     token = floor_str[token_start_pos:token_end_pos + len(token_suff) + 5]
     if not ((token_start_pos > 0) and (token_end_pos > token_start_pos)):
         token = 'N/A'
-    if len(token) != 29:
+    if not ((len(token) == 29) or (len(token) == 28)):
         token = 'N/A'
 
     vote_date_str = floor_str[floor_str.find(date_pref) + len(date_pref2):floor_str.find(date_suff)]
@@ -106,6 +108,8 @@ def analyse_floor_b(floor_str):
     votes = []
     for ov in ori_votes:
         pos = ov.find(vote_pref)
+        if pos == -1:
+            continue
         votes.append(ov[pos + len(vote_pref):])
     votes = [floor_num] + [token] + [vote_abs_min] + votes
 
