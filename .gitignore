@@ -41,3 +41,17 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#upload tools
+*.cmd
+*.bat
+*.exe
+
+#work data
+data/
+
+#output results
+*.html
+
+#cpython file
+*.pyc
