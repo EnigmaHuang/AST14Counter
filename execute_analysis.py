@@ -3,17 +3,22 @@
 __author__ = 'Enigma'
 
 from AST14PyHeader import *
-from FetchFile import *
+import FetchFile as FF
 import AnalyseData as AD
 import datetime as DT
 import os
+import sys
 
 mode = server_mode
 
 #确定当前日期
 cur_date = DT.datetime.now()
-#cur_date += timedelta(hours=-4) #for debug use only
 date_str = str(cur_date.month).zfill(2) + str(cur_date.day).zfill(2)
+
+if (len(sys.argv) == 2) and (sys.argv[1].startswith('--debugdate:')):
+    date_str = sys.argv[1][12:]
+
+print 'Analysis target date = ',date_str
 
 #下载当前日期的配置文件
 config_file_name = download_path[mode] + date_str + conf_file_suff
@@ -23,7 +28,7 @@ check_file_name = download_path[mode] + date_str + check_file_suff
 if os.path.isfile(check_file_name):
     print 'No contest today.'
     exit()
-download_url_to_file(config_file_url, config_file_name)
+FF.download_url_to_file(config_file_url, config_file_name)
 #检测配置文件是否正确，如果不正确=没有比赛，直接退出
 #如果是非法的配置文件，不需要转码，本身就是utf-8
 if AD.legal_config_file(config_file_name) == no_contest:
@@ -35,13 +40,13 @@ if AD.legal_config_file(config_file_name) == no_contest:
     chk_file.close()
     print 'No contest'
     exit()
-file_convert_pagecode(config_file_name, source_pagecode, config_file_name, dest_pagecode)
+FF.file_convert_pagecode(config_file_name, source_pagecode, config_file_name, dest_pagecode)
 
 AD.load_config_file(config_file_name)
 
 #下载主投票所的首页文件
-download_url_to_file(home_page_url, home_page_file_name[mode])
-file_convert_pagecode(home_page_file_name[mode], source_pagecode, home_page_file_name[mode], dest_pagecode)
+FF.download_url_to_file(home_page_url, home_page_file_name[mode])
+FF.file_convert_pagecode(home_page_file_name[mode], source_pagecode, home_page_file_name[mode], dest_pagecode)
 hp_file = open(home_page_file_name[mode], 'r')
 hp_text = hp_file.read()
 hp_file.close()
@@ -55,21 +60,21 @@ data_url_1 = fixed_data_url + data_url_id + '/'
 startpos2 = hp_text.find(fixed_data_url, startpos) + len(fixed_data_url)
 checkpos = hp_text.find(bkup_title_pref, startpos2)
 url_2_title = hp_text[checkpos + 13:checkpos + 17]
-if (url_2_title != bkup_title):
+if (url_2_title == test_title):
     startpos2 = hp_text.find(fixed_data_url, checkpos) + len(fixed_data_url)
 data_url_id_2 = hp_text[startpos2:startpos2+10]
 data_file_2_name = download_path[mode] + data_url_id_2 + data_file_suff
 data_url_2 = fixed_data_url + data_url_id_2 + '/'
 
 #下载最新和次新的主投票页面
-download_url_to_file(data_url_1, data_file_name)
-file_convert_pagecode(data_file_name, source_pagecode, data_file_name, dest_pagecode)
-download_url_to_file(data_url_2, data_file_2_name)
-file_convert_pagecode(data_file_2_name, source_pagecode, data_file_2_name, dest_pagecode)
+FF.download_url_to_file(data_url_1, data_file_name)
+FF.file_convert_pagecode(data_file_name, source_pagecode, data_file_name, dest_pagecode)
+FF.download_url_to_file(data_url_2, data_file_2_name)
+FF.file_convert_pagecode(data_file_2_name, source_pagecode, data_file_2_name, dest_pagecode)
 
 #下载备用投票所的首页文件
-download_url_to_file(home_page_url_2, home_page_file_2_name[mode])
-file_convert_pagecode(home_page_file_2_name[mode], source_pagecode_2, home_page_file_2_name[mode], dest_pagecode)
+FF.download_url_to_file(home_page_url_2, home_page_file_2_name[mode])
+FF.file_convert_pagecode(home_page_file_2_name[mode], source_pagecode_2, home_page_file_2_name[mode], dest_pagecode)
 
 hp_file = open(home_page_file_2_name[mode], 'r')
 hp_text = hp_file.read()
@@ -82,8 +87,8 @@ data_url_id_3 = hp_text[startpos:startpos + 10]
 data_file_3_name = download_path[mode] + 'b' + data_url_id_3 + data_file_suff
 data_url_3 = fixed_data_url_2 + data_url_id_3 + '/'
 #下载最新的备用投票页面
-download_url_to_file(data_url_3, data_file_3_name)
-file_convert_pagecode(data_file_3_name, source_pagecode_2, data_file_3_name, dest_pagecode)
+FF.download_url_to_file(data_url_3, data_file_3_name)
+FF.file_convert_pagecode(data_file_3_name, source_pagecode_2, data_file_3_name, dest_pagecode)
 
 AD.debug_info.append('<html><head><meta http-equiv=Content-Type content="text/html;charset=utf-8">')
 AD.debug_info.append('<title>AST14 WDSUL Debug Info</title><body>\n')
